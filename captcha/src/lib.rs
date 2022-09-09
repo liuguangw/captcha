@@ -1,3 +1,4 @@
+//! a captcha library for rust
 mod captcha;
 mod captcha_builder;
 pub(crate) mod color;
