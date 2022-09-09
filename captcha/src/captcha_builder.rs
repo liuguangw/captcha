@@ -71,6 +71,9 @@ impl<'a, 'b> CaptchaBuilder<'a, 'b> {
         //println!("width={}, height={}", self.width, self.height);
         let font_size = (self.width as f32) / (self.length as f32) - rng.gen_range(1.0..=4.0);
         let scale = Scale::uniform(font_size);
+        if self.fonts.is_empty() {
+            panic!("no fonts loaded");
+        }
         let font_index = rng.gen_range(0..self.fonts.len());
         let font = &self.fonts[font_index];
         let glyphs: Vec<_> = font

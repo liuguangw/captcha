@@ -9,7 +9,7 @@ fn main() {
         Font::try_from_bytes(include_bytes!("../fonts/captcha4.ttf")).unwrap(),
         Font::try_from_bytes(include_bytes!("../fonts/captcha5.ttf")).unwrap(),
     ];
-    let captcha = CaptchaBuilder {
+    let builder = CaptchaBuilder {
         //custom attribute
         width: 120,
         height: 40,
@@ -20,7 +20,12 @@ fn main() {
     };
     for i in 0..6 {
         let save_path = format!("image_{}.png", i);
-        let phrase = captcha.save(&save_path).unwrap();
+        //each save build and save a new image
+        let phrase = builder.save(&save_path).unwrap();
         println!("[{}]phrase={}", i, phrase);
     }
+    let captcha = builder.build().unwrap();
+    //require base64 feature
+    let base64_url = captcha.base64_url();
+    println!("base64: phrase={}\n{}", captcha.phrase, base64_url);
 }
