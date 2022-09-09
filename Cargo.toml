@@ -1,0 +1,6 @@
+[workspace]
+
+members = [
+    "captcha",
+    "captcha_examples"
+]
