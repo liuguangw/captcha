@@ -7,7 +7,7 @@ use std::{fmt::Write, io::Cursor, path::Path};
 use crate::{color, Captcha};
 
 ///the builder of captcha
-pub struct CaptchaBuilder<'a> {
+pub struct CaptchaBuilder<'a, 'b> {
     ///captcha image width
     pub width: u32,
     ///captcha image height
@@ -22,7 +22,7 @@ pub struct CaptchaBuilder<'a> {
     ///image background color (optional)
     pub background_color: Option<Rgba<u8>>,
     ///fonts collection for text
-    pub fonts: Vec<Font<'a>>,
+    pub fonts: &'b [Font<'a>],
     ///The maximum number of lines to draw behind of the image
     pub max_behind_lines: Option<u32>,
     ///The maximum number of lines to draw in front of the image
@@ -31,7 +31,7 @@ pub struct CaptchaBuilder<'a> {
     pub max_ellipse_lines: Option<u32>,
 }
 
-impl<'a> Default for CaptchaBuilder<'a> {
+impl<'a, 'b> Default for CaptchaBuilder<'a, 'b> {
     fn default() -> Self {
         Self {
             width: 150,
@@ -39,14 +39,7 @@ impl<'a> Default for CaptchaBuilder<'a> {
             length: 5,
             source: String::from("1234567890qwertyuioplkjhgfdsazxcvbnm"),
             background_color: None,
-            fonts: vec![
-                //Font::try_from_bytes(include_bytes!("./fonts/captcha0.ttf")).unwrap(),
-                //Font::try_from_bytes(include_bytes!("./fonts/captcha1.ttf")).unwrap(),
-                //Font::try_from_bytes(include_bytes!("./fonts/captcha2.ttf")).unwrap(),
-                //Font::try_from_bytes(include_bytes!("./fonts/captcha3.ttf")).unwrap(),
-                //Font::try_from_bytes(include_bytes!("./fonts/captcha4.ttf")).unwrap(),
-                //Font::try_from_bytes(include_bytes!("./fonts/captcha5.ttf")).unwrap(),
-            ],
+            fonts: &[],
             max_behind_lines: None,
             max_front_lines: None,
             max_ellipse_lines: None,
@@ -54,7 +47,7 @@ impl<'a> Default for CaptchaBuilder<'a> {
     }
 }
 
-impl<'a> CaptchaBuilder<'a> {
+impl<'a, 'b> CaptchaBuilder<'a, 'b> {
     fn gen_random_text(&self, rng: &mut ThreadRng) -> String {
         let mut source_chars = vec![];
         for c in self.source.as_str().chars() {
