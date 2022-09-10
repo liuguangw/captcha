@@ -1,6 +1,7 @@
 use captcha_a::{CaptchaBuilder, Font};
 
 fn main() {
+    //load fonts
     let fonts = vec![
         Font::try_from_bytes(include_bytes!("../fonts/captcha0.ttf")).unwrap(),
         Font::try_from_bytes(include_bytes!("../fonts/captcha1.ttf")).unwrap(),

@@ -2,5 +2,6 @@
 
 members = [
     "captcha",
-    "captcha_examples"
+    "captcha_examples",
+    "captcha_example_actix"
 ]
