@@ -11,14 +11,14 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-captcha-a = "0.1.3"
+captcha-a = "0.1.4"
 ```
 
 or with `base64` feature, if you need base64_url
 
 ```toml
 [dependencies]
-captcha-a = { version ="0.1.3", features = ["base64"] }
+captcha-a = { version ="0.1.4", features = ["base64"] }
 ```
 
 ## code example
@@ -66,7 +66,7 @@ use actix_web::{
     web::{self, Json},
     App, CustomizeResponder, HttpServer, Responder,
 };
-use captcha_a::{Captcha, CaptchaBuilder, Font};
+use captcha_a::{Captcha, CaptchaBuilder, Font, ImageResult};
 use serde::Serialize;
 
 ///define a struct to hold fonts
@@ -95,26 +95,30 @@ impl Default for CaptchaService {
         }
     }
 }
-
-fn build_captcha(captcha_service: &web::Data<CaptchaService>) -> Captcha {
-    let builder = CaptchaBuilder {
-        //custom attribute
-        width: 150,
-        height: 40,
-        fonts: &captcha_service.fonts,
-        //default attribute
-        ..Default::default()
-    };
-    builder.build().expect("build captcha failed")
+//add build function
+impl CaptchaService {
+    pub fn build_captcha(&self) -> ImageResult<Captcha> {
+        let builder = CaptchaBuilder {
+            //custom attribute
+            width: 150,
+            height: 40,
+            fonts: &self.fonts,
+            //default attribute
+            ..Default::default()
+        };
+        builder.build()
+    }
 }
 
 ///show captcha handler
 #[actix_web::get("/img")]
 async fn captcha_show(captcha_service: web::Data<CaptchaService>) -> CustomizeResponder<Vec<u8>> {
-    let captcha = build_captcha(&captcha_service);
+    let captcha = captcha_service
+        .build_captcha()
+        .expect("build captcha failed");
     //todo save captcha code in database or session
     println!("captcha code={}", captcha.phrase);
-    let captcha_data = Vec::from(captcha.data());
+    let captcha_data = captcha.raw_data;
     captcha_data
         .customize()
         .insert_header((header::CONTENT_TYPE, "image/png"))
@@ -129,7 +133,9 @@ pub struct ApiResponse {
 ///use json with base64 data url handler
 #[actix_web::get("/img-api")]
 async fn captcha_json(captcha_service: web::Data<CaptchaService>) -> Json<ApiResponse> {
-    let captcha = build_captcha(&captcha_service);
+    let captcha = captcha_service
+        .build_captcha()
+        .expect("build captcha failed");
     //todo save captcha code in database or session
     println!("captcha code={}", captcha.phrase);
     let resp = ApiResponse {

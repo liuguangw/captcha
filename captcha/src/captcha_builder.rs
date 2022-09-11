@@ -226,9 +226,9 @@ impl<'a, 'b> CaptchaBuilder<'a, 'b> {
     pub fn build(&self) -> ImageResult<Captcha> {
         let (image, phrase) = self.build_image();
         let format = image::ImageOutputFormat::Png;
-        let mut bytes: Vec<u8> = Vec::new();
-        image.write_to(&mut Cursor::new(&mut bytes), format)?;
-        Ok(Captcha::new(bytes, phrase))
+        let mut raw_data: Vec<u8> = Vec::new();
+        image.write_to(&mut Cursor::new(&mut raw_data), format)?;
+        Ok(Captcha { raw_data, phrase })
     }
 
     ///build captcha and save in png format
