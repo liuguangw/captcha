@@ -16,18 +16,12 @@ impl Default for CaptchaService {
         //load fonts
         Self {
             fonts: vec![
-                Font::try_from_bytes(include_bytes!("../../captcha_examples/fonts/captcha0.ttf"))
-                    .unwrap(),
-                Font::try_from_bytes(include_bytes!("../../captcha_examples/fonts/captcha1.ttf"))
-                    .unwrap(),
-                Font::try_from_bytes(include_bytes!("../../captcha_examples/fonts/captcha2.ttf"))
-                    .unwrap(),
-                Font::try_from_bytes(include_bytes!("../../captcha_examples/fonts/captcha3.ttf"))
-                    .unwrap(),
-                Font::try_from_bytes(include_bytes!("../../captcha_examples/fonts/captcha4.ttf"))
-                    .unwrap(),
-                Font::try_from_bytes(include_bytes!("../../captcha_examples/fonts/captcha5.ttf"))
-                    .unwrap(),
+                Font::try_from_bytes(include_bytes!("./fonts/captcha0.ttf")).unwrap(),
+                Font::try_from_bytes(include_bytes!("./fonts/captcha1.ttf")).unwrap(),
+                Font::try_from_bytes(include_bytes!("./fonts/captcha2.ttf")).unwrap(),
+                Font::try_from_bytes(include_bytes!("./fonts/captcha3.ttf")).unwrap(),
+                Font::try_from_bytes(include_bytes!("./fonts/captcha4.ttf")).unwrap(),
+                Font::try_from_bytes(include_bytes!("./fonts/captcha5.ttf")).unwrap(),
             ],
         }
     }
@@ -85,6 +79,7 @@ async fn captcha_json(captcha_service: web::Data<CaptchaService>) -> Json<ApiRes
 async fn main() -> std::io::Result<()> {
     //share service in handlers
     let captcha_service = web::Data::new(CaptchaService::default());
+    println!("server run at: 127.0.0.1:8080");
     HttpServer::new(move || {
         App::new()
             .service(captcha_show)

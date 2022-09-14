@@ -1,9 +1,9 @@
 # captcha-a
 a captcha library for rust
 
-![image_0](captcha_examples/images/image_0.png) | ![image_1](captcha_examples/images/image_1.png) | ![image_2](captcha_examples/images/image_2.png)
+![image_0](examples/images/image_0.png) | ![image_1](examples/images/image_1.png) | ![image_2](examples/images/image_2.png)
 --- | --- | ---
-![image_3](captcha_examples/images/image_3.png) | ![image_4](captcha_examples/images/image_4.png) | ![image_5](captcha_examples/images/image_5.png)
+![image_3](examples/images/image_3.png) | ![image_4](examples/images/image_4.png) | ![image_5](examples/images/image_5.png)
 
 ## Usage
 
@@ -29,12 +29,12 @@ use captcha_a::{CaptchaBuilder, Font};
 fn main() {
     //load fonts
     let fonts = vec![
-        Font::try_from_bytes(include_bytes!("../fonts/captcha0.ttf")).unwrap(),
-        Font::try_from_bytes(include_bytes!("../fonts/captcha1.ttf")).unwrap(),
-        Font::try_from_bytes(include_bytes!("../fonts/captcha2.ttf")).unwrap(),
-        Font::try_from_bytes(include_bytes!("../fonts/captcha3.ttf")).unwrap(),
-        Font::try_from_bytes(include_bytes!("../fonts/captcha4.ttf")).unwrap(),
-        Font::try_from_bytes(include_bytes!("../fonts/captcha5.ttf")).unwrap(),
+        Font::try_from_bytes(include_bytes!("./fonts/captcha0.ttf")).unwrap(),
+        Font::try_from_bytes(include_bytes!("./fonts/captcha1.ttf")).unwrap(),
+        Font::try_from_bytes(include_bytes!("./fonts/captcha2.ttf")).unwrap(),
+        Font::try_from_bytes(include_bytes!("./fonts/captcha3.ttf")).unwrap(),
+        Font::try_from_bytes(include_bytes!("./fonts/captcha4.ttf")).unwrap(),
+        Font::try_from_bytes(include_bytes!("./fonts/captcha5.ttf")).unwrap(),
     ];
     let builder = CaptchaBuilder {
         //custom attribute
@@ -79,18 +79,12 @@ impl Default for CaptchaService {
         //load fonts
         Self {
             fonts: vec![
-                Font::try_from_bytes(include_bytes!("../../captcha_examples/fonts/captcha0.ttf"))
-                    .unwrap(),
-                Font::try_from_bytes(include_bytes!("../../captcha_examples/fonts/captcha1.ttf"))
-                    .unwrap(),
-                Font::try_from_bytes(include_bytes!("../../captcha_examples/fonts/captcha2.ttf"))
-                    .unwrap(),
-                Font::try_from_bytes(include_bytes!("../../captcha_examples/fonts/captcha3.ttf"))
-                    .unwrap(),
-                Font::try_from_bytes(include_bytes!("../../captcha_examples/fonts/captcha4.ttf"))
-                    .unwrap(),
-                Font::try_from_bytes(include_bytes!("../../captcha_examples/fonts/captcha5.ttf"))
-                    .unwrap(),
+                Font::try_from_bytes(include_bytes!("./fonts/captcha0.ttf")).unwrap(),
+                Font::try_from_bytes(include_bytes!("./fonts/captcha1.ttf")).unwrap(),
+                Font::try_from_bytes(include_bytes!("./fonts/captcha2.ttf")).unwrap(),
+                Font::try_from_bytes(include_bytes!("./fonts/captcha3.ttf")).unwrap(),
+                Font::try_from_bytes(include_bytes!("./fonts/captcha4.ttf")).unwrap(),
+                Font::try_from_bytes(include_bytes!("./fonts/captcha5.ttf")).unwrap(),
             ],
         }
     }
@@ -148,6 +142,7 @@ async fn captcha_json(captcha_service: web::Data<CaptchaService>) -> Json<ApiRes
 async fn main() -> std::io::Result<()> {
     //share service in handlers
     let captcha_service = web::Data::new(CaptchaService::default());
+    println!("server run at: 127.0.0.1:8080");
     HttpServer::new(move || {
         App::new()
             .service(captcha_show)
