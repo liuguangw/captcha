@@ -11,14 +11,14 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-captcha-a = "0.1.5"
+captcha-a = "0.1.6"
 ```
 
 or with `base64` feature, if you need base64_url
 
 ```toml
 [dependencies]
-captcha-a = { version ="0.1.5", features = ["base64"] }
+captcha-a = { version ="0.1.6", features = ["base64"] }
 ```
 
 ## code example
